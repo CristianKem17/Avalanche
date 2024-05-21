@@ -1,26 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.25;
 
-contract FunctionAndError {
-    uint public num;
-    address public admin;
+contract McdoBurgers {
 
-    constructor(address _admin, uint _value) {
-        num = _value;
-        admin = _admin;
+    function BurgerMcdo(uint Price_BurgerMcdo) public pure {
+        require(Price_BurgerMcdo > 140, "Please add your payment, to proceed order");
     }
 
-    function RequireValue() public view {
-        require(num > 10, "Value must be greater than 10");
-    }
-
-    function RevertValue() public view {
-       if (num > 1000) {
-            revert("Value cannot be greater than 1000");
+    function BigMac(uint Price_BigMac) public pure {
+        if (Price_BigMac < 200) {
+            revert("Please add your payment, to proceed order");
        }
     }
 
-    function AssertValue() public view {
-        assert(num == 0);
+    function CheeseBurger(uint Price_CheeseBurger) public pure {
+        assert(Price_CheeseBurger == 170);
     }
 }
