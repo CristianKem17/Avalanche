@@ -26,4 +26,10 @@ contract KemToken is ERC20 {
     function burnedToken(uint256 amount) public {
         _burn(msg.sender, amount);
     }
+
+    //Custom transfer function
+    function transferToken(address to, uint256 amount) public returns (bool) {
+        _transfer(msg.sender, to, amount);
+        return true;
+    }
 }
