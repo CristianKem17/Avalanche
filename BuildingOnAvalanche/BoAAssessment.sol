@@ -11,6 +11,9 @@ contract DegenToken is ERC20, ERC20Burnable, Ownable {
     string[] private itemNames = ["HealthPotion", "ManaPotion", "Antidote"];
     uint256[] private itemPrices = [100, 200, 300]; // Prices in tokens without decimals
 
+    // Mapping to store the inventory of each player
+    mapping(address => mapping(Item => uint256)) private playerInventory;
+
     constructor() ERC20("Degen", "DGN") Ownable(msg.sender) {}
 
     // Mint new tokens and distribute them as rewards (onlyOwner)
@@ -30,7 +33,8 @@ contract DegenToken is ERC20, ERC20Burnable, Ownable {
         require(balanceOf(msg.sender) >= itemPrice, "Not enough tokens to redeem item");
 
         _burn(msg.sender, itemPrice);
-        // Logic to handle the delivery of the item to the user can be added here
+        // Add the item to the player's inventory
+        playerInventory[msg.sender][Item(itemId)] += 1;
     }
 
     // Checking token balance
@@ -47,5 +51,14 @@ contract DegenToken is ERC20, ERC20Burnable, Ownable {
     // Function to show available item prices
     function showItemPrices() public view returns (uint256[] memory) {
         return itemPrices;
+    }
+
+    // Function to check the player's inventory
+    function checkInventory() public view returns (uint256[] memory) {
+        uint256[] memory inventory = new uint256[](itemNames.length);
+        for (uint256 i = 0; i < itemNames.length; i++) {
+            inventory[i] = playerInventory[msg.sender][Item(i)];
+        }
+        return inventory;
     }
 }
