@@ -53,12 +53,34 @@ contract DegenToken is ERC20, ERC20Burnable, Ownable {
         return itemPrices;
     }
 
-    // Function to check the player's inventory
-    function checkInventory() public view returns (uint256[] memory) {
-        uint256[] memory inventory = new uint256[](itemNames.length);
-        for (uint256 i = 0; i < itemNames.length; i++) {
-            inventory[i] = playerInventory[msg.sender][Item(i)];
-        }
-        return inventory;
+    function checkInventory() public view returns (string[] memory) {
+    string[] memory inventory = new string[](itemNames.length);
+    for (uint256 i = 0; i < itemNames.length; i++) {
+        inventory[i] = string(abi.encodePacked(itemNames[i], " x ", uint2str(playerInventory[msg.sender][Item(i)]), "\n"));
     }
+    return inventory;
+    }
+
+    // Helper function to convert uint256 to string
+    function uint2str(uint256 _i) internal pure returns (string memory) {
+        if (_i == 0) {
+            return "0";
+            }
+            uint256 j = _i;
+            uint256 len;
+            while (j != 0) {
+                len++;
+                j /= 10;
+                }
+                bytes memory bstr = new bytes(len);
+                uint256 k = len;
+                while (_i != 0) {
+                    k = k - 1;
+                    uint8 temp = (48 + uint8(_i - (_i / 10) * 10));
+                    bytes1 b1 = bytes1(temp);
+                    bstr[k] = b1;
+                    _i /= 10;
+                    }
+                    return string(bstr);
+                    }
 }
